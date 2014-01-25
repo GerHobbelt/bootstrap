@@ -1,52 +1,101 @@
-$(document).ready(function(){
+// NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
+// IT'S ALL JUST JUNK FOR OUR DOCS!
+// ++++++++++++++++++++++++++++++++++++++++++
 
-  // table sort example
-  // ==================
+/*!
+ * JavaScript for Bootstrap's docs (http://getbootstrap.com)
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under the Creative Commons Attribution 3.0 Unported License. For
+ * details, see http://creativecommons.org/licenses/by/3.0/.
+ */
 
-  $("#sortTableExample").tablesorter( { sortList: [[ 1, 0 ]] } )
 
+!function ($) {
 
-  // add on logic
-  // ============
+  $(function () {
 
-  $('.add-on :checkbox').click(function () {
-    if ($(this).attr('checked')) {
-      $(this).parents('.add-on').addClass('active')
-    } else {
-      $(this).parents('.add-on').removeClass('active')
+    // IE10 viewport hack for Surface/desktop Windows 8 bug
+    //
+    // See Getting Started docs for more information
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+      var msViewportStyle = document.createElement('style')
+      msViewportStyle.appendChild(
+        document.createTextNode(
+          '@-ms-viewport{width:auto!important}'
+        )
+      )
+      document.querySelector('head').appendChild(msViewportStyle)
     }
-  })
 
 
-  // Disable certain links in docs
-  // =============================
-  // Please do not carry these styles over to your projects, it's merely here to prevent button clicks form taking you away from your spot on page
+    var $window = $(window)
+    var $body   = $(document.body)
 
-  $('ul.tabs a, ul.pills a, .pagination a, .well .btn, .actions .btn, .alert-message .btn, a.close').click(function (e) {
-    e.preventDefault()
-  })
+    var navHeight = $('.navbar').outerHeight(true) + 10
 
-  // Copy code blocks in docs
-  $(".copy-code").focus(function () {
-    var el = this;
-    // push select to event loop for chrome :{o
-    setTimeout(function () { $(el).select(); }, 0);
-  });
+    $body.scrollspy({
+      target: '.bs-sidebar',
+      // offset: navHeight
+    })
 
+    $window.on('load', function () {
+      $body.scrollspy('refresh')
+    })
 
-  // POSITION STATIC TWIPSIES
-  // ========================
+    $('.bs-docs-container [href=#]').click(function (e) {
+      e.preventDefault()
+    })
 
-  $(window).bind( 'load resize', function () {
-    $(".twipsies a").each(function () {
-       $(this)
-        .twipsy({
-          live: false
-        , placement: $(this).attr('title')
-        , trigger: 'manual'
-        , offset: 2
-        })
-        .twipsy('show')
+    // back to top
+    setTimeout(function () {
+      var $sideBar = $('.bs-sidebar')
+
+      $sideBar.affix({
+        offset: {
+          top: function () {
+            var offsetTop      = $sideBar.offset().top
+            var sideBarMargin  = parseInt($sideBar.children(0).css('margin-top'), 10)
+            var navOuterHeight = $('.bs-docs-nav').height()
+
+            return (this.top = offsetTop - navOuterHeight - sideBarMargin)
+          },
+          bottom: function () {
+            return (this.bottom = $('.bs-footer').outerHeight(true))
+          }
+        }
+      })
+    }, 100)
+
+    setTimeout(function () {
+      $('.bs-top').affix()
+    }, 100)
+
+    // tooltip demo
+    $('.tooltip-demo').tooltip({
+      selector: '[data-toggle=tooltip]',
+      container: 'body'
+    })
+
+    $('.tooltip-test').tooltip()
+    $('.popover-test').popover()
+
+    $('.bs-docs-navbar').tooltip({
+      selector: 'a[data-toggle=tooltip]',
+      container: '.bs-docs-navbar .nav'
+    })
+
+    // popover demo
+    $('[data-toggle=popover]').popover()
+
+    // button state demo
+    $('#loading-example-btn')
+      .click(function () {
+        var btn = $(this)
+        btn.button('loading')
+        setTimeout(function () {
+          btn.button('reset')
+        }, 3000)
       })
   })
-});
+
+}(jQuery)
