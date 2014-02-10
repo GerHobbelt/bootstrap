@@ -21,7 +21,7 @@ To get started, check out <http://getbootstrap.com>!
 
 Three quick start options are available:
 
-- [Download the latest release](https://github.com/twbs/bootstrap/archive/v3.0.3.zip).
+- [Download the latest release](https://github.com/twbs/bootstrap/archive/v3.1.0.zip).
 - Clone the repo: `git clone https://github.com/twbs/bootstrap.git`.
 - Install with [Bower](http://bower.io): `bower install bootstrap`.
 
@@ -131,7 +131,7 @@ Keep track of development and community news.
 - Follow [@twbootstrap on Twitter](http://twitter.com/twbootstrap).
 - Read and subscribe to [The Official Bootstrap Blog](http://blog.getbootstrap.com).
 - Chat with fellow Bootstrappers in IRC. On the `irc.freenode.net` server, in the `##twitter-bootstrap` channel.
-- Implementation help may be found at Stack Overflow (tagged [`twitter-bootstrap`](http://stackoverflow.com/questions/tagged/twitter-bootstrap)).
+- Implementation help may be found at Stack Overflow (tagged [`twitter-bootstrap-3`](http://stackoverflow.com/questions/tagged/twitter-bootstrap-3)).
 
 
 
