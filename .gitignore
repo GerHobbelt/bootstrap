@@ -43,3 +43,8 @@ bower_components
 
 # editor bak files
 *.bak
+
+# github analysis scripts temporaries
+__forks.info__/
+__forks__.bulk_dump
+
