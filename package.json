@@ -40,7 +40,7 @@
     "test": "npm-run-all dist js-test docs",
     "watch": "lerna run watch --parallel",
     "prerelease": "lerna run test && lerna run build",
-    "release": "lerna publish -force-update *"
+    "release": "lerna publish --force-publish"
   },
   "style": "dist/css/bootstrap.css",
   "sass": "scss/bootstrap.scss",
