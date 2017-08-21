@@ -1,8 +1,3 @@
-# Default application configuration that all configurations inherit from.
-scss_files:
-  - "scss/**/*.scss"
-  - "docs/assets/scss/**/*.scss"
-
 plugin_directories: ['.scss-linters']
 
 # List of gem names to load custom linters from (make sure they are already
@@ -37,8 +32,6 @@ linters:
 
   Comment:
     enabled: true
-    exclude:
-      - scss/bootstrap.scss
     style: silent
 
   DebugStatement:
