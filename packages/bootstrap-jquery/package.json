@@ -1,6 +1,6 @@
 {
   "name": "@bootstrap/jquery",
-  "version": "4.0.0-beta",
+  "version": "4.0.0-beta.2",
   "description": "",
   "main": "dist/bootstrap.js",
   "author": "",
