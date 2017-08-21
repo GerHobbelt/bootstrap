@@ -1,6 +1,6 @@
 {
   "name": "@wrakky-bootstrap/bootstrap",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/js/bootstrap.js",
   "author": "",
@@ -9,8 +9,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@wrakky-bootstrap/css": "^1.0.3",
-    "@wrakky-bootstrap/jquery": "^1.0.3"
+    "@wrakky-bootstrap/css": "^1.0.4",
+    "@wrakky-bootstrap/jquery": "^1.0.4"
   },
   "scripts": {
     "build": "npm-run-all --parallel css-* js-*",
