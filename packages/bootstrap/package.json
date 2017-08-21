@@ -1,10 +1,13 @@
 {
   "name": "@wrakky-bootstrap/bootstrap",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/js/bootstrap.js",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@bootstrap/css": "^4.0.0-beta.2",
     "@bootstrap/jquery": "^4.0.0-beta.2"

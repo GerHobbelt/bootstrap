@@ -1,10 +1,13 @@
 {
   "name": "@wrakky-bootstrap/css",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "npm-run-all lint compile prefix minify",
     "docs": "npm-run-all lint-docs compile-docs prefix-docs minify-docs",

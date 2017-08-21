@@ -1,10 +1,13 @@
 {
   "name": "@wrakky-bootstrap/jquery",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/bootstrap.js",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "npm-run-all lint compile minify",
     "lint": "eslint src/ && eslint --config tests/.eslintrc.json --env node build/ Gruntfile.js",
