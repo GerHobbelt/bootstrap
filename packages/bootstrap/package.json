@@ -8,9 +8,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "devDependencies": {
     "@wrakky-bootstrap/css": "^1.0.4",
     "@wrakky-bootstrap/jquery": "^1.0.4"
+  },
+  "peerDependencies": {
+    "jquery": ">=3.0.0",
+    "popper.js": "^1.11.0"
   },
   "scripts": {
     "build": "npm-run-all --parallel css-* js-*",
@@ -22,5 +26,10 @@
     "js-src": "shx cp -r node_modules/@bootstrap/jquery/dist/* js/dist && shx cp -r node_modules/@bootstrap/jquery/src/* js/src",
     "prejs-dist": "shx mkdir -p dist/js",
     "js-dist": "shx cp node_modules/@bootstrap/jquery/dist/bootstrap.* dist/js"
-  }
+  },
+  "files": [
+    "dist",
+    "js",
+    "scss"
+  ]
 }
