@@ -1,6 +1,6 @@
 {
   "name": "@wrakky-bootstrap/bootstrap",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/js/bootstrap.js",
   "author": "",
@@ -9,8 +9,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "@wrakky-bootstrap/css": "^1.0.4",
-    "@wrakky-bootstrap/jquery": "^1.0.4"
+    "@wrakky-bootstrap/css": "^1.0.5",
+    "@wrakky-bootstrap/jquery": "^1.0.5"
   },
   "peerDependencies": {
     "jquery": ">=3.0.0",
