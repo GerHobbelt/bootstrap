@@ -35,6 +35,7 @@
     "css-flip": "~0.3.0",
     "grunt": ">=0.4.2",
     "grunt-cli": ">=0.1.12",
+    "grunt-autoprefixer": "~0.7.2",
     "grunt-banner": "~0.2.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
