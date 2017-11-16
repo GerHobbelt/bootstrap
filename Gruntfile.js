@@ -45,7 +45,7 @@ module.exports = function (grunt) {
       },
       grunt: {
         options: {
-          node: true
+          jshintrc: 'grunt/.jshintrc'
         },
         src: ['Gruntfile.js', 'grunt/*.js']
       },
@@ -233,10 +233,10 @@ module.exports = function (grunt) {
         }
       },
       examples: {
-          expand: true,
-          cwd: 'docs/examples/',
-          src: ['**/*.css'],
-          dest: 'docs/examples/'
+        expand: true,
+        cwd: 'docs/examples/',
+        src: ['**/*.css'],
+        dest: 'docs/examples/'
       }
     },
 
