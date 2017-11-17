@@ -1,5 +1,5 @@
 /* ========================================================================
- * Bootstrap: offcanvas.js v3.1.2
+ * Bootstrap: offcanvas.js v3.1.3
  * http://jasny.github.io/bootstrap/javascript/#offcanvas
  * ========================================================================
  * Copyright 2013-2014 Arnold Daniels
@@ -140,8 +140,10 @@
     var bodyWidth = $('body').width()
     var prop = 'padding-' + this.opposite(this.placement)
 
-    if ($('body').data('offcanvas-style') === undefined) $('body').data('offcanvas-style', $('body').attr('style'))
-    
+    if ($('body').data('offcanvas-style') === undefined) {
+      $('body').data('offcanvas-style', $('body').attr('style') || '')
+    }
+      
     $('body').css('overflow', 'hidden')
 
     if ($('body').width() > bodyWidth) {
