@@ -22,8 +22,6 @@ const Util = (() => {
 
   const TransitionEndEvent = {
     WebkitTransition : 'webkitTransitionEnd',
-    MozTransition    : 'transitionend',
-    OTransition      : 'oTransitionEnd otransitionend',
     transition       : 'transitionend'
   }
 
@@ -154,6 +152,10 @@ const Util = (() => {
           }
         }
       }
+    },
+
+    get jQuery() {
+      return window.jQuery || window.$
     }
   }
 
