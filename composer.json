@@ -1,19 +1,37 @@
 {
-    "name": "jasny/bootstrap"
-  , "description": "The missing bootstrap components"
-  , "keywords": ["bootstrap", "css"]
-  , "homepage": "http://jasny.github.io/bootstrap"
-  , "authors": [
-      {
-        "name": "Arnold Daniels",
-        "email": "arnold@jasny.net"
-      }
-    ]
-  , "support": {
-      "issues": "https://github.com/jasny/bootstrap/issues"
+  "name": "twbs/bootstrap",
+  "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+  "keywords": [
+    "css",
+    "js",
+    "less",
+    "mobile-first",
+    "responsive",
+    "front-end",
+    "framework",
+    "web"
+  ],
+  "homepage": "http://getbootstrap.com",
+  "authors": [
+    {
+      "name": "Mark Otto",
+      "email": "markdotto@gmail.com"
+    },
+    {
+      "name": "Jacob Thornton",
+      "email": "jacobthornton@gmail.com"
     }
-  , "license": "Apache-2.0"
-  , "require": {
-      "twitter/bootstrap" : ">=3.1.0"
+  ],
+  "support": {
+    "issues": "https://github.com/twbs/bootstrap/issues"
+  },
+  "license": "MIT",
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.2.x-dev"
     }
+  },
+  "replace": {
+    "twitter/bootstrap": "self.version"
+  }
 }
