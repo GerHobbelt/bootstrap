@@ -6,33 +6,26 @@ pygments:         true
 permalink:        pretty
 
 # Server
-source:           docs
-destination:      _gh_pages
+source:           ./docs
+destination:      ./_gh_pages
 host:             0.0.0.0
 port:             9001
 baseurl:          /
-url:              http://getbootstrap.com
+url:              http://localhost:9001
 encoding:         UTF-8
 
 exclude:
   - "jade"
-  - "src"
   - "vendor"
 
 # Custom vars
-current_version:  3.1.1
-repo:             https://github.com/twbs/bootstrap
-sass_repo:        https://github.com/twbs/bootstrap-sass
+current_version:  3.1.2
+repo:             https://github.com/jasny/bootstrap
 
 download:
-  source:         https://github.com/twbs/bootstrap/archive/v3.1.1.zip
-  dist:           https://github.com/twbs/bootstrap/releases/download/v3.1.1/bootstrap-3.1.1-dist.zip
-  sass:           https://github.com/twbs/bootstrap-sass/archive/v3.1.1.tar.gz
-
-blog:             http://blog.getbootstrap.com
-expo:             http://expo.getbootstrap.com
+  source:         https://github.com/jasny/bootstrap/archive/v3.1.2.zip
+  dist:           https://github.com/jasny/bootstrap/releases/download/v3.1.2/jasny-bootstrap-3.1.2-dist.zip
 
 cdn:
-  css:            //netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css
-  css_theme:      //netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css
-  js:             //netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js
+  css:            //cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.2/css/jasny-bootstrap.min.css
+  js:             //cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.2/js/jasny-bootstrap.min.js

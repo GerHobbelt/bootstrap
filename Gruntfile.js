@@ -1,8 +1,8 @@
 /*!
- * Bootstrap's Gruntfile
- * http://getbootstrap.com
- * Copyright 2013-2014 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Jasny Bootstrap's Gruntfile
+ * http://jasny.github.io/bootstrap
+ * Copyright 2013-2014 Arnold Daniels.
+ * Licensed under Apache License 2.0 (https://github.com/jasny/bootstrap/blob/master/LICENSE)
  */
 
 module.exports = function (grunt) {
@@ -17,7 +17,6 @@ module.exports = function (grunt) {
 
   var fs = require('fs');
   var path = require('path');
-  var generateGlyphiconsData = require('./grunt/bs-glyphicons-data-generator.js');
   var BsLessdocParser = require('./grunt/bs-lessdoc-parser.js');
   var generateRawFilesJs = require('./grunt/bs-raw-files-generator.js');
   var updateShrinkwrap = require('./grunt/shrinkwrap.js');
@@ -28,15 +27,18 @@ module.exports = function (grunt) {
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*!\n' +
-            ' * Bootstrap v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
-            ' * Copyright 2011-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+            ' * Jasny Bootstrap v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
+            ' * Copyright 2012-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
             ' * Licensed under <%= pkg.license.type %> (<%= pkg.license.url %>)\n' +
             ' */\n',
-    jqueryCheck: 'if (typeof jQuery === \'undefined\') { throw new Error(\'Bootstrap\\\'s JavaScript requires jQuery\') }\n\n',
+    jqueryCheck: 'if (typeof jQuery === \'undefined\') { throw new Error(\'Jasny Bootstrap\\\'s JavaScript requires jQuery\') }\n\n',
 
     // Task configuration.
     clean: {
-      dist: ['dist', 'docs/dist']
+      dist: ['dist', 'docs/dist'],
+      jekyll: ['_gh_pages'],
+      assets: ['assets/css/*.min.css', 'assets/js/*.min.js'],
+      jade: ['jade/*.jade']
     },
 
     jshint: {
@@ -56,29 +58,25 @@ module.exports = function (grunt) {
         src: 'js/tests/unit/*.js'
       },
       assets: {
-        src: 'docs/assets/js/src/*.js'
+        src: ['docs/assets/js/application.js', 'docs/assets/js/customizer.js']
       }
     },
 
     jscs: {
       options: {
-        config: 'js/.jscsrc'
+        config: 'js/.jscs.json',
       },
       grunt: {
-        options: {
-          'requireCamelCaseOrUpperCaseIdentifiers': null,
-          'requireParenthesesAroundIIFE': true
-        },
-        src: '<%= jshint.grunt.src %>'
+        src: ['Gruntfile.js', 'grunt/*.js']
       },
       src: {
-        src: '<%= jshint.src.src %>'
+        src: 'js/*.js'
       },
       test: {
-        src: '<%= jshint.test.src %>'
+        src: 'js/tests/unit/*.js'
       },
       assets: {
-        src: '<%= jshint.assets.src %>'
+        src: ['docs/assets/js/application.js', 'docs/assets/js/customizer.js']
       }
     },
 
@@ -87,19 +85,10 @@ module.exports = function (grunt) {
         csslintrc: 'less/.csslintrc'
       },
       src: [
-        'dist/css/bootstrap.css',
-        'dist/css/bootstrap-theme.css'
-      ],
-      examples: [
+        'dist/css/<%= pkg.name %>.css',
+        'docs/assets/css/docs.css',
         'docs/examples/**/*.css'
-      ],
-      docs: {
-        options: {
-          'ids': false,
-          'overqualified-elements': false
-        },
-        src: 'docs/assets/css/src/docs.css'
-      }
+      ]
     },
 
     concat: {
@@ -110,17 +99,10 @@ module.exports = function (grunt) {
       bootstrap: {
         src: [
           'js/transition.js',
-          'js/alert.js',
-          'js/button.js',
-          'js/carousel.js',
-          'js/collapse.js',
-          'js/dropdown.js',
-          'js/modal.js',
-          'js/tooltip.js',
-          'js/popover.js',
-          'js/scrollspy.js',
-          'js/tab.js',
-          'js/affix.js'
+          'js/offcanvas.js',
+          'js/rowlink.js',
+          'js/inputmask.js',
+          'js/fileinput.js'
         ],
         dest: 'dist/js/<%= pkg.name %>.js'
       }
@@ -148,7 +130,7 @@ module.exports = function (grunt) {
           'docs/assets/js/vendor/blob.js',
           'docs/assets/js/vendor/filesaver.js',
           'docs/assets/js/raw-files.min.js',
-          'docs/assets/js/src/customizer.js'
+          'docs/assets/js/customizer.js'
         ],
         dest: 'docs/assets/js/customize.min.js'
       },
@@ -158,7 +140,7 @@ module.exports = function (grunt) {
         },
         src: [
           'docs/assets/js/vendor/holder.js',
-          'docs/assets/js/src/application.js'
+          'docs/assets/js/application.js'
         ],
         dest: 'docs/assets/js/docs.min.js'
       }
@@ -174,19 +156,7 @@ module.exports = function (grunt) {
           sourceMapFilename: 'dist/css/<%= pkg.name %>.css.map'
         },
         files: {
-          'dist/css/<%= pkg.name %>.css': 'less/bootstrap.less'
-        }
-      },
-      compileTheme: {
-        options: {
-          strictMath: true,
-          sourceMap: true,
-          outputSourceFiles: true,
-          sourceMapURL: '<%= pkg.name %>-theme.css.map',
-          sourceMapFilename: 'dist/css/<%= pkg.name %>-theme.css.map'
-        },
-        files: {
-          'dist/css/<%= pkg.name %>-theme.css': 'less/theme.less'
+          'dist/css/<%= pkg.name %>.css': 'less/build/<%= pkg.name %>.less'
         }
       },
       minify: {
@@ -195,44 +165,7 @@ module.exports = function (grunt) {
           report: 'min'
         },
         files: {
-          'dist/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.css',
-          'dist/css/<%= pkg.name %>-rtl.min.css': 'dist/css/<%= pkg.name %>-rtl.css',
-          'dist/css/<%= pkg.name %>-theme.min.css': 'dist/css/<%= pkg.name %>-theme.css'
-        }
-      }
-    },
-
-    autoprefixer: {
-      options: {
-        browsers: ['last 2 versions', 'ie 8', 'ie 9', 'android 2.3', 'android 4', 'opera 12']
-      },
-      core: {
-        options: {
-          map: true
-        },
-        src: 'dist/css/<%= pkg.name %>.css'
-      },
-      theme: {
-        options: {
-          map: true
-        },
-        src: 'dist/css/<%= pkg.name %>-theme.css'
-      },
-      docs: {
-        src: 'docs/assets/css/docs.css'
-      },
-      examples: {
-        expand: true,
-        cwd: 'docs/examples/',
-        src: ['**/*.css'],
-        dest: 'docs/examples/'
-      }
-    },
-
-    css_flip: {
-      rtl: {
-        files: {
-          'dist/css/<%= pkg.name %>-rtl.css': 'dist/css/<%= pkg.name %>.css'
+          'dist/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.css'
         }
       }
     },
@@ -243,11 +176,11 @@ module.exports = function (grunt) {
           keepSpecialComments: '*',
           noAdvanced: true, // turn advanced optimizations off until the issue is fixed in clean-css
           report: 'min',
-          compatibility: 'ie8'
+          selectorsMergeMode: 'ie8'
         },
         src: [
-          'docs/assets/css/src/docs.css',
-          'docs/assets/css/src/pygments-manni.css'
+          'docs/assets/css/docs.css',
+          'docs/assets/css/pygments-manni.css'
         ],
         dest: 'docs/assets/css/docs.min.css'
       }
@@ -262,11 +195,7 @@ module.exports = function (grunt) {
         files: {
           src: [
             'dist/css/<%= pkg.name %>.css',
-            'dist/css/<%= pkg.name %>-rtl.css',
-            'dist/css/<%= pkg.name %>.min.css',
-            'dist/css/<%= pkg.name %>-rtl.min.css',
-            'dist/css/<%= pkg.name %>-theme.css',
-            'dist/css/<%= pkg.name %>-theme.min.css'
+            'dist/css/<%= pkg.name %>.min.css'
           ]
         }
       }
@@ -278,37 +207,24 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'dist/css/<%= pkg.name %>.css': 'dist/css/<%= pkg.name %>.css',
-          'dist/css/<%= pkg.name %>-rtl.css': 'dist/css/<%= pkg.name %>-rtl.css',
-          'dist/css/<%= pkg.name %>-theme.css': 'dist/css/<%= pkg.name %>-theme.css'
+          'dist/css/<%= pkg.name %>.css': 'dist/css/<%= pkg.name %>.css'
         }
       },
       examples: {
         expand: true,
         cwd: 'docs/examples/',
-        src: '**/*.css',
+        src: ['**/*.css'],
         dest: 'docs/examples/'
-      },
-      docs: {
-        files: {
-          'docs/assets/css/src/docs.css': 'docs/assets/css/src/docs.css'
-        }
       }
     },
 
     copy: {
-      fonts: {
-        expand: true,
-        src: 'fonts/*',
-        dest: 'dist/'
-      },
       docs: {
         expand: true,
         cwd: './dist',
         src: [
           '{css,js}/*.min.*',
-          'css/*.map',
-          'fonts/*'
+          'css/*.map'
         ],
         dest: 'docs/dist'
       }
@@ -339,7 +255,7 @@ module.exports = function (grunt) {
         options: {
           pretty: true,
           data: function () {
-            var filePath = path.join(__dirname, 'less/variables.less');
+            var filePath = path.join(__dirname, 'less/build/variables.less');
             var fileContent = fs.readFileSync(filePath, {encoding: 'utf8'});
             var parser = new BsLessdocParser(fileContent);
             return {sections: parser.parseFile()};
@@ -383,14 +299,14 @@ module.exports = function (grunt) {
       }
     },
 
-    sed: {
+    replace: {
       versionNumber: {
-        pattern: (function () {
-          var old = grunt.option('oldver');
-          return old ? RegExp.quote(old) : old;
-        })(),
-        replacement: grunt.option('newver'),
-        recursive: true
+        src: ['*.js', '*.md', '*.json', '*.yml', 'js/*.js'],
+        overwrite: true,
+        replacements: [{
+          from: grunt.option('oldver'),
+          to: grunt.option('newver')
+        }]
       }
     },
 
@@ -407,7 +323,7 @@ module.exports = function (grunt) {
 
     exec: {
       npmUpdate: {
-        command: 'npm update'
+        command: 'npm update --silent'
       },
       npmShrinkWrap: {
         command: 'npm shrinkwrap --dev'
@@ -418,7 +334,6 @@ module.exports = function (grunt) {
 
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
-  require('time-grunt')(grunt);
 
   // Docs HTML validation task
   grunt.registerTask('validate-html', ['jekyll', 'validation']);
@@ -446,24 +361,24 @@ module.exports = function (grunt) {
   grunt.registerTask('dist-js', ['concat', 'uglify']);
 
   // CSS distribution task.
-  grunt.registerTask('less-compile', ['less:compileCore', 'less:compileTheme']);
-  grunt.registerTask('dist-css', ['less-compile', 'autoprefixer', 'css_flip', 'csscomb', 'less:minify', 'cssmin', 'usebanner']);
+  grunt.registerTask('dist-css', ['less', 'cssmin', 'csscomb', 'usebanner']);
 
   // Docs distribution task.
   grunt.registerTask('dist-docs', 'copy:docs');
 
   // Full distribution task.
-  grunt.registerTask('dist', ['clean', 'dist-css', 'copy:fonts', 'dist-js', 'dist-docs']);
+  grunt.registerTask('dist', ['clean:dist', 'dist-css', 'dist-js', 'dist-docs']);
 
   // Default task.
-  grunt.registerTask('default', ['test', 'dist', 'build-glyphicons-data', 'build-customizer', 'update-shrinkwrap']);
+  grunt.registerTask('default', ['dist', 'build-customizer']);
 
+  // Documentation task.
+  grunt.registerTask('docs', ['jekyll', 'dist-docs']);
+  
   // Version numbering task.
   // grunt change-version-number --oldver=A.B.C --newver=X.Y.Z
   // This can be overzealous, so its changes should always be manually reviewed!
-  grunt.registerTask('change-version-number', 'sed');
-
-  grunt.registerTask('build-glyphicons-data', generateGlyphiconsData);
+  grunt.registerTask('change-version-number', 'replace');
 
   // task for building customizer
   grunt.registerTask('build-customizer', ['build-customizer-html', 'build-raw-files']);
@@ -474,6 +389,6 @@ module.exports = function (grunt) {
   });
 
   // Task for updating the npm packages used by the Travis build.
-  grunt.registerTask('update-shrinkwrap', ['exec:npmUpdate', 'exec:npmShrinkWrap', '_update-shrinkwrap']);
-  grunt.registerTask('_update-shrinkwrap', function () { updateShrinkwrap.call(this, grunt); });
+  grunt.registerTask('update-shrinkwrap', ['exec:npmUpdate', 'exec:npmShrinkWrap', '∆update-shrinkwrap']);
+  grunt.registerTask('∆update-shrinkwrap', function () { updateShrinkwrap.call(this, grunt); });
 };
