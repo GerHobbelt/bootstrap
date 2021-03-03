@@ -154,8 +154,6 @@
     }
   };
 
-  document.documentElement.dir === 'rtl';
-
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
       var $ = getjQuery();
@@ -332,7 +330,7 @@
 
     Tab.jQueryInterface = function jQueryInterface(config) {
       return this.each(function () {
-        var data = Data__default['default'].getData(this, DATA_KEY) || new Tab(this);
+        var data = Data__default['default'].get(this, DATA_KEY) || new Tab(this);
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
@@ -363,7 +361,7 @@
 
   EventHandler__default['default'].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
     event.preventDefault();
-    var data = Data__default['default'].getData(this, DATA_KEY) || new Tab(this);
+    var data = Data__default['default'].get(this, DATA_KEY) || new Tab(this);
     data.show();
   });
   /**

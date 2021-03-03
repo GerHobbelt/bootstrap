@@ -166,8 +166,6 @@
     }
   };
 
-  document.documentElement.dir === 'rtl';
-
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
       var $ = getjQuery();
@@ -233,7 +231,7 @@
       var _this;
 
       _this = _BaseComponent.call(this, element) || this;
-      _this._scrollElement = element.tagName === 'BODY' ? window : element;
+      _this._scrollElement = _this._element.tagName === 'BODY' ? window : _this._element;
       _this._config = _this._getConfig(config);
       _this._selector = _this._config.target + " " + SELECTOR_NAV_LINKS + ", " + _this._config.target + " " + SELECTOR_LIST_ITEMS + ", " + _this._config.target + " ." + CLASS_NAME_DROPDOWN_ITEM;
       _this._offsets = [];
@@ -419,7 +417,7 @@
 
     ScrollSpy.jQueryInterface = function jQueryInterface(config) {
       return this.each(function () {
-        var data = Data__default['default'].getData(this, DATA_KEY);
+        var data = Data__default['default'].get(this, DATA_KEY);
 
         var _config = typeof config === 'object' && config;
 

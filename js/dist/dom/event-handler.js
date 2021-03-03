@@ -27,8 +27,6 @@
     return null;
   };
 
-  document.documentElement.dir === 'rtl';
-
   /**
    * --------------------------------------------------------------------------
    * Bootstrap (v5.0.0-beta2): dom/event-handler.js

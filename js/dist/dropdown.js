@@ -185,7 +185,9 @@
     }
   };
 
-  var isRTL = document.documentElement.dir === 'rtl';
+  var isRTL = function isRTL() {
+    return document.documentElement.dir === 'rtl';
+  };
 
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
@@ -242,15 +244,14 @@
   var SELECTOR_MENU = '.dropdown-menu';
   var SELECTOR_NAVBAR_NAV = '.navbar-nav';
   var SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-item:not(.disabled):not(:disabled)';
-  var PLACEMENT_TOP = isRTL ? 'top-end' : 'top-start';
-  var PLACEMENT_TOPEND = isRTL ? 'top-start' : 'top-end';
-  var PLACEMENT_BOTTOM = isRTL ? 'bottom-end' : 'bottom-start';
-  var PLACEMENT_BOTTOMEND = isRTL ? 'bottom-start' : 'bottom-end';
-  var PLACEMENT_RIGHT = isRTL ? 'left-start' : 'right-start';
-  var PLACEMENT_LEFT = isRTL ? 'right-start' : 'left-start';
+  var PLACEMENT_TOP = isRTL() ? 'top-end' : 'top-start';
+  var PLACEMENT_TOPEND = isRTL() ? 'top-start' : 'top-end';
+  var PLACEMENT_BOTTOM = isRTL() ? 'bottom-end' : 'bottom-start';
+  var PLACEMENT_BOTTOMEND = isRTL() ? 'bottom-start' : 'bottom-end';
+  var PLACEMENT_RIGHT = isRTL() ? 'left-start' : 'right-start';
+  var PLACEMENT_LEFT = isRTL() ? 'right-start' : 'left-start';
   var Default = {
     offset: [0, 2],
-    flip: true,
     boundary: 'clippingParents',
     reference: 'toggle',
     display: 'dynamic',
@@ -258,7 +259,6 @@
   };
   var DefaultType = {
     offset: '(array|string|function)',
-    flip: 'boolean',
     boundary: '(string|element)',
     reference: '(string|element|object)',
     display: 'string',
@@ -406,8 +406,6 @@
     };
 
     _proto.dispose = function dispose() {
-      _BaseComponent.prototype.dispose.call(this);
-
       EventHandler__default['default'].off(this._element, EVENT_KEY);
       this._menu = null;
 
@@ -416,6 +414,8 @@
 
         this._popper = null;
       }
+
+      _BaseComponent.prototype.dispose.call(this);
     };
 
     _proto.update = function update() {
@@ -505,7 +505,6 @@
         modifiers: [{
           name: 'preventOverflow',
           options: {
-            altBoundary: this._config.flip,
             boundary: this._config.boundary
           }
         }, {
@@ -528,7 +527,7 @@
     ;
 
     Dropdown.dropdownInterface = function dropdownInterface(element, config) {
-      var data = Data__default['default'].getData(element, DATA_KEY);
+      var data = Data__default['default'].get(element, DATA_KEY);
 
       var _config = typeof config === 'object' ? config : null;
 
@@ -559,7 +558,7 @@
       var toggles = SelectorEngine__default['default'].find(SELECTOR_DATA_TOGGLE);
 
       for (var i = 0, len = toggles.length; i < len; i++) {
-        var context = Data__default['default'].getData(toggles[i], DATA_KEY);
+        var context = Data__default['default'].get(toggles[i], DATA_KEY);
         var relatedTarget = {
           relatedTarget: toggles[i]
         };

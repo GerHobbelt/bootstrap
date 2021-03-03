@@ -39,25 +39,27 @@
 
   var BaseComponent = /*#__PURE__*/function () {
     function BaseComponent(element) {
+      element = typeof element === 'string' ? document.querySelector(element) : element;
+
       if (!element) {
         return;
       }
 
       this._element = element;
-      Data__default['default'].setData(element, this.constructor.DATA_KEY, this);
+      Data__default['default'].set(this._element, this.constructor.DATA_KEY, this);
     }
 
     var _proto = BaseComponent.prototype;
 
     _proto.dispose = function dispose() {
-      Data__default['default'].removeData(this._element, this.constructor.DATA_KEY);
+      Data__default['default'].remove(this._element, this.constructor.DATA_KEY);
       this._element = null;
     }
     /** Static */
     ;
 
     BaseComponent.getInstance = function getInstance(element) {
-      return Data__default['default'].getData(element, this.DATA_KEY);
+      return Data__default['default'].get(element, this.DATA_KEY);
     };
 
     _createClass(BaseComponent, null, [{

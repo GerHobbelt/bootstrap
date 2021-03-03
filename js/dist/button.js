@@ -73,8 +73,6 @@
     }
   };
 
-  document.documentElement.dir === 'rtl';
-
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
       var $ = getjQuery();
@@ -130,7 +128,7 @@
 
     Button.jQueryInterface = function jQueryInterface(config) {
       return this.each(function () {
-        var data = Data__default['default'].getData(this, DATA_KEY);
+        var data = Data__default['default'].get(this, DATA_KEY);
 
         if (!data) {
           data = new Button(this);
@@ -162,7 +160,7 @@
   EventHandler__default['default'].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
     event.preventDefault();
     var button = event.target.closest(SELECTOR_DATA_TOGGLE);
-    var data = Data__default['default'].getData(button, DATA_KEY);
+    var data = Data__default['default'].get(button, DATA_KEY);
 
     if (!data) {
       data = new Button(button);

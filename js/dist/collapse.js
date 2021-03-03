@@ -207,8 +207,6 @@
     }
   };
 
-  document.documentElement.dir === 'rtl';
-
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
       var $ = getjQuery();
@@ -273,14 +271,14 @@
       _this = _BaseComponent.call(this, element) || this;
       _this._isTransitioning = false;
       _this._config = _this._getConfig(config);
-      _this._triggerArray = SelectorEngine__default['default'].find(SELECTOR_DATA_TOGGLE + "[href=\"#" + element.id + "\"]," + (SELECTOR_DATA_TOGGLE + "[data-bs-target=\"#" + element.id + "\"]"));
+      _this._triggerArray = SelectorEngine__default['default'].find(SELECTOR_DATA_TOGGLE + "[href=\"#" + _this._element.id + "\"]," + (SELECTOR_DATA_TOGGLE + "[data-bs-target=\"#" + _this._element.id + "\"]"));
       var toggleList = SelectorEngine__default['default'].find(SELECTOR_DATA_TOGGLE);
 
       for (var i = 0, len = toggleList.length; i < len; i++) {
         var elem = toggleList[i];
         var selector = getSelectorFromElement(elem);
         var filterElement = SelectorEngine__default['default'].find(selector).filter(function (foundElem) {
-          return foundElem === element;
+          return foundElem === _this._element;
         });
 
         if (selector !== null && filterElement.length) {
@@ -345,7 +343,7 @@
         var tempActiveData = actives.find(function (elem) {
           return container !== elem;
         });
-        activesData = tempActiveData ? Data__default['default'].getData(tempActiveData, DATA_KEY) : null;
+        activesData = tempActiveData ? Data__default['default'].get(tempActiveData, DATA_KEY) : null;
 
         if (activesData && activesData._isTransitioning) {
           return;
@@ -365,7 +363,7 @@
           }
 
           if (!activesData) {
-            Data__default['default'].setData(elemActive, DATA_KEY, null);
+            Data__default['default'].set(elemActive, DATA_KEY, null);
           }
         });
       }
@@ -529,7 +527,7 @@
     ;
 
     Collapse.collapseInterface = function collapseInterface(element, config) {
-      var data = Data__default['default'].getData(element, DATA_KEY);
+      var data = Data__default['default'].get(element, DATA_KEY);
 
       var _config = _extends({}, Default, Manipulator__default['default'].getDataAttributes(element), typeof config === 'object' && config ? config : {});
 
@@ -587,7 +585,7 @@
     var selector = getSelectorFromElement(this);
     var selectorElements = SelectorEngine__default['default'].find(selector);
     selectorElements.forEach(function (element) {
-      var data = Data__default['default'].getData(element, DATA_KEY);
+      var data = Data__default['default'].get(element, DATA_KEY);
       var config;
 
       if (data) {

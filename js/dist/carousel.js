@@ -211,7 +211,9 @@
     }
   };
 
-  var isRTL = document.documentElement.dir === 'rtl';
+  var isRTL = function isRTL() {
+    return document.documentElement.dir === 'rtl';
+  };
 
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
@@ -414,8 +416,6 @@
     };
 
     _proto.dispose = function dispose() {
-      _BaseComponent.prototype.dispose.call(this);
-
       EventHandler__default['default'].off(this._element, EVENT_KEY);
       this._items = null;
       this._config = null;
@@ -424,6 +424,8 @@
       this._isSliding = null;
       this._activeElement = null;
       this._indicatorsElement = null;
+
+      _BaseComponent.prototype.dispose.call(this);
     } // Private
     ;
 
@@ -444,7 +446,7 @@
       this.touchDeltaX = 0; // swipe left
 
       if (direction > 0) {
-        if (isRTL) {
+        if (isRTL()) {
           this.next();
         } else {
           this.prev();
@@ -453,7 +455,7 @@
 
 
       if (direction < 0) {
-        if (isRTL) {
+        if (isRTL()) {
           this.prev();
         } else {
           this.next();
@@ -567,7 +569,7 @@
       if (event.key === ARROW_LEFT_KEY) {
         event.preventDefault();
 
-        if (isRTL) {
+        if (isRTL()) {
           this.next();
         } else {
           this.prev();
@@ -575,7 +577,7 @@
       } else if (event.key === ARROW_RIGHT_KEY) {
         event.preventDefault();
 
-        if (isRTL) {
+        if (isRTL()) {
           this.prev();
         } else {
           this.next();
@@ -735,7 +737,7 @@
     ;
 
     Carousel.carouselInterface = function carouselInterface(element, config) {
-      var data = Data__default['default'].getData(element, DATA_KEY);
+      var data = Data__default['default'].get(element, DATA_KEY);
 
       var _config = _extends({}, Default, Manipulator__default['default'].getDataAttributes(element));
 
@@ -787,7 +789,7 @@
       Carousel.carouselInterface(target, config);
 
       if (slideIndex) {
-        Data__default['default'].getData(target, DATA_KEY).to(slideIndex);
+        Data__default['default'].get(target, DATA_KEY).to(slideIndex);
       }
 
       event.preventDefault();
@@ -819,7 +821,7 @@
     var carousels = SelectorEngine__default['default'].find(SELECTOR_DATA_RIDE);
 
     for (var i = 0, len = carousels.length; i < len; i++) {
-      Carousel.carouselInterface(carousels[i], Data__default['default'].getData(carousels[i], DATA_KEY));
+      Carousel.carouselInterface(carousels[i], Data__default['default'].get(carousels[i], DATA_KEY));
     }
   });
   /**

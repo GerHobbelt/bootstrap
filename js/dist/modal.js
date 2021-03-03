@@ -211,7 +211,9 @@
     }
   };
 
-  var isRTL = document.documentElement.dir === 'rtl';
+  var isRTL = function isRTL() {
+    return document.documentElement.dir === 'rtl';
+  };
 
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
@@ -290,7 +292,7 @@
 
       _this = _BaseComponent.call(this, element) || this;
       _this._config = _this._getConfig(config);
-      _this._dialog = SelectorEngine__default['default'].findOne(SELECTOR_DIALOG, element);
+      _this._dialog = SelectorEngine__default['default'].findOne(SELECTOR_DIALOG, _this._element);
       _this._backdrop = null;
       _this._isShown = false;
       _this._isBodyOverflowing = false;
@@ -672,11 +674,11 @@
     _proto._adjustDialog = function _adjustDialog() {
       var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
 
-      if (!this._isBodyOverflowing && isModalOverflowing && !isRTL || this._isBodyOverflowing && !isModalOverflowing && isRTL) {
+      if (!this._isBodyOverflowing && isModalOverflowing && !isRTL() || this._isBodyOverflowing && !isModalOverflowing && isRTL()) {
         this._element.style.paddingLeft = this._scrollbarWidth + "px";
       }
 
-      if (this._isBodyOverflowing && !isModalOverflowing && !isRTL || !this._isBodyOverflowing && isModalOverflowing && isRTL) {
+      if (this._isBodyOverflowing && !isModalOverflowing && !isRTL() || !this._isBodyOverflowing && isModalOverflowing && isRTL()) {
         this._element.style.paddingRight = this._scrollbarWidth + "px";
       }
     };
@@ -713,7 +715,13 @@
     };
 
     _proto._setElementAttributes = function _setElementAttributes(selector, styleProp, callback) {
+      var _this12 = this;
+
       SelectorEngine__default['default'].find(selector).forEach(function (element) {
+        if (element !== document.body && window.innerWidth > element.clientWidth + _this12._scrollbarWidth) {
+          return;
+        }
+
         var actualValue = element.style[styleProp];
         var calculatedValue = window.getComputedStyle(element)[styleProp];
         Manipulator__default['default'].setDataAttribute(element, styleProp, actualValue);
@@ -755,7 +763,7 @@
 
     Modal.jQueryInterface = function jQueryInterface(config, relatedTarget) {
       return this.each(function () {
-        var data = Data__default['default'].getData(this, DATA_KEY);
+        var data = Data__default['default'].get(this, DATA_KEY);
 
         var _config = _extends({}, Default, Manipulator__default['default'].getDataAttributes(this), typeof config === 'object' && config ? config : {});
 
@@ -795,7 +803,7 @@
 
 
   EventHandler__default['default'].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
-    var _this12 = this;
+    var _this13 = this;
 
     var target = getElementFromSelector(this);
 
@@ -810,12 +818,12 @@
       }
 
       EventHandler__default['default'].one(target, EVENT_HIDDEN, function () {
-        if (isVisible(_this12)) {
-          _this12.focus();
+        if (isVisible(_this13)) {
+          _this13.focus();
         }
       });
     });
-    var data = Data__default['default'].getData(target, DATA_KEY);
+    var data = Data__default['default'].get(target, DATA_KEY);
 
     if (!data) {
       var config = _extends({}, Manipulator__default['default'].getDataAttributes(target), Manipulator__default['default'].getDataAttributes(this));

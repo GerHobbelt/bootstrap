@@ -91,8 +91,6 @@
     }
   };
 
-  document.documentElement.dir === 'rtl';
-
   var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
     onDOMContentLoaded(function () {
       var $ = getjQuery();
@@ -211,7 +209,7 @@
 
     Popover.jQueryInterface = function jQueryInterface(config) {
       return this.each(function () {
-        var data = Data__default['default'].getData(this, DATA_KEY);
+        var data = Data__default['default'].get(this, DATA_KEY);
 
         var _config = typeof config === 'object' ? config : null;
 
@@ -221,7 +219,7 @@
 
         if (!data) {
           data = new Popover(this, _config);
-          Data__default['default'].setData(this, DATA_KEY, data);
+          Data__default['default'].set(this, DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
