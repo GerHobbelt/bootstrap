@@ -2,9 +2,9 @@
 
 /*!
  * Script to run vnu-jar if Java is available.
- * Copyright 2017 The Bootstrap Authors
- * Copyright 2017 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Copyright 2017-2021 The Bootstrap Authors
+ * Copyright 2017-2021 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
 'use strict'
@@ -18,7 +18,7 @@ childProcess.exec('java -version', (error, stdout, stderr) => {
     return
   }
 
-  const is32bitJava = !stderr.match(/64-Bit/)
+  const is32bitJava = !/64-Bit/.test(stderr)
 
   // vnu-jar accepts multiple ignores joined with a `|`.
   // Also note that the ignores are regular expressions.
@@ -27,26 +27,26 @@ childProcess.exec('java -version', (error, stdout, stderr) => {
     // Firefox's non-standard autocomplete behavior - see https://bugzilla.mozilla.org/show_bug.cgi?id=654072
     'Attribute “autocomplete” is only allowed when the input type is.*',
     'Attribute “autocomplete” not allowed on element “button” at this point.',
-    // We use holder.js with `data-src` and no `src` to avoid 404 errors;
-    // we could work around this, but I'm not sure it's worth it.
-    'Element “img” is missing required attribute “src”.',
     // Markup used in Components → Forms → Layout → Form grid → Horizontal form is currently invalid,
     // but used this way due to lack of support for flexbox layout on <fieldset> element in most browsers
     'Element “legend” not allowed as child of element “div” in this context.*',
     // Content → Reboot uses various date/time inputs as a visual example.
     // Documentation does not rely on them being usable.
     'The “date” input type is not supported in all browsers.*',
-    'The “time” input type is not supported in all browsers.*',
-    // IE11 doesn't recognise <main> / give the element an implicit "main" landmark.
-    // Explicit role="main" is redundant for other modern browsers, but still valid.
-    'The “main” role is unnecessary for element “main”.'
+    'The “week” input type is not supported in all browsers.*',
+    'The “month” input type is not supported in all browsers.*',
+    'The “color” input type is not supported in all browsers.*',
+    'The “datetime-local” input type is not supported in all browsers.*',
+    'The “time” input type is not supported in all browsers.*'
   ].join('|')
 
   const args = [
     '-jar',
-    vnu,
+    `"${vnu}"`,
     '--asciiquotes',
     '--skip-non-html',
+    // Ignore the language code warnings
+    '--no-langdetect',
     '--Werror',
     `--filterpattern "${ignores}"`,
     '_gh_pages/',
@@ -62,5 +62,5 @@ childProcess.exec('java -version', (error, stdout, stderr) => {
     shell: true,
     stdio: 'inherit'
   })
-  .on('exit', process.exit)
+    .on('exit', process.exit)
 })

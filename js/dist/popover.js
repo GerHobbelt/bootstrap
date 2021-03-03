@@ -1,50 +1,140 @@
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+/*!
+  * Bootstrap popover.js v5.0.0-beta2 (https://getbootstrap.com/)
+  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./dom/data.js'), require('./dom/selector-engine.js'), require('./tooltip.js')) :
+  typeof define === 'function' && define.amd ? define(['./dom/data', './dom/selector-engine', './tooltip'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Popover = factory(global.Data, global.SelectorEngine, global.Tooltip));
+}(this, (function (Data, SelectorEngine, Tooltip) { 'use strict';
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+  var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  var Tooltip__default = /*#__PURE__*/_interopDefaultLegacy(Tooltip);
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
 
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.3): popover.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * --------------------------------------------------------------------------
- */
-var Popover = function ($) {
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+
+  function _extends() {
+    _extends = Object.assign || function (target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+
+      return target;
+    };
+
+    return _extends.apply(this, arguments);
+  }
+
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+
+    _setPrototypeOf(subClass, superClass);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.0.0-beta2): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var getjQuery = function getjQuery() {
+    var _window = window,
+        jQuery = _window.jQuery;
+
+    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
+      return jQuery;
+    }
+
+    return null;
+  };
+
+  var onDOMContentLoaded = function onDOMContentLoaded(callback) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', callback);
+    } else {
+      callback();
+    }
+  };
+
+  document.documentElement.dir === 'rtl';
+
+  var defineJQueryPlugin = function defineJQueryPlugin(name, plugin) {
+    onDOMContentLoaded(function () {
+      var $ = getjQuery();
+      /* istanbul ignore if */
+
+      if ($) {
+        var JQUERY_NO_CONFLICT = $.fn[name];
+        $.fn[name] = plugin.jQueryInterface;
+        $.fn[name].Constructor = plugin;
+
+        $.fn[name].noConflict = function () {
+          $.fn[name] = JQUERY_NO_CONFLICT;
+          return plugin.jQueryInterface;
+        };
+      }
+    });
+  };
+
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
+
   var NAME = 'popover';
-  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.popover';
   var EVENT_KEY = "." + DATA_KEY;
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
   var CLASS_PREFIX = 'bs-popover';
   var BSCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
 
-  var Default = _extends({}, Tooltip.Default, {
+  var Default = _extends({}, Tooltip__default['default'].Default, {
     placement: 'right',
+    offset: [0, 8],
     trigger: 'click',
     content: '',
-    template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div></div>'
+    template: '<div class="popover" role="tooltip">' + '<div class="popover-arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div>' + '</div>'
   });
 
-  var DefaultType = _extends({}, Tooltip.DefaultType, {
+  var DefaultType = _extends({}, Tooltip__default['default'].DefaultType, {
     content: '(string|element|function)'
   });
 
-  var ClassName = {
-    FADE: 'fade',
-    SHOW: 'show'
-  };
-  var Selector = {
-    TITLE: '.popover-header',
-    CONTENT: '.popover-body'
-  };
   var Event = {
     HIDE: "hide" + EVENT_KEY,
     HIDDEN: "hidden" + EVENT_KEY,
@@ -56,17 +146,18 @@ var Popover = function ($) {
     FOCUSOUT: "focusout" + EVENT_KEY,
     MOUSEENTER: "mouseenter" + EVENT_KEY,
     MOUSELEAVE: "mouseleave" + EVENT_KEY
-    /**
-     * ------------------------------------------------------------------------
-     * Class Definition
-     * ------------------------------------------------------------------------
-     */
-
   };
+  var CLASS_NAME_FADE = 'fade';
+  var CLASS_NAME_SHOW = 'show';
+  var SELECTOR_TITLE = '.popover-header';
+  var SELECTOR_CONTENT = '.popover-body';
+  /**
+   * ------------------------------------------------------------------------
+   * Class Definition
+   * ------------------------------------------------------------------------
+   */
 
-  var Popover =
-  /*#__PURE__*/
-  function (_Tooltip) {
+  var Popover = /*#__PURE__*/function (_Tooltip) {
     _inheritsLoose(Popover, _Tooltip);
 
     function Popover() {
@@ -75,68 +166,67 @@ var Popover = function ($) {
 
     var _proto = Popover.prototype;
 
-    // overrides
+    // Overrides
     _proto.isWithContent = function isWithContent() {
       return this.getTitle() || this._getContent();
     };
 
-    _proto.addAttachmentClass = function addAttachmentClass(attachment) {
-      $(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
-    };
-
-    _proto.getTipElement = function getTipElement() {
-      this.tip = this.tip || $(this.config.template)[0];
-      return this.tip;
-    };
-
     _proto.setContent = function setContent() {
-      var $tip = $(this.getTipElement()); // we use append for html objects to maintain js events
+      var tip = this.getTipElement(); // we use append for html objects to maintain js events
 
-      this.setElementContent($tip.find(Selector.TITLE), this.getTitle());
+      this.setElementContent(SelectorEngine__default['default'].findOne(SELECTOR_TITLE, tip), this.getTitle());
 
       var content = this._getContent();
 
       if (typeof content === 'function') {
-        content = content.call(this.element);
+        content = content.call(this._element);
       }
 
-      this.setElementContent($tip.find(Selector.CONTENT), content);
-      $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
-    }; // private
+      this.setElementContent(SelectorEngine__default['default'].findOne(SELECTOR_CONTENT, tip), content);
+      tip.classList.remove(CLASS_NAME_FADE, CLASS_NAME_SHOW);
+    } // Private
+    ;
 
+    _proto._addAttachmentClass = function _addAttachmentClass(attachment) {
+      this.getTipElement().classList.add(CLASS_PREFIX + "-" + this.updateAttachment(attachment));
+    };
 
     _proto._getContent = function _getContent() {
-      return this.element.getAttribute('data-content') || this.config.content;
+      return this._element.getAttribute('data-bs-content') || this.config.content;
     };
 
     _proto._cleanTipClass = function _cleanTipClass() {
-      var $tip = $(this.getTipElement());
-      var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
+      var tip = this.getTipElement();
+      var tabClass = tip.getAttribute('class').match(BSCLS_PREFIX_REGEX);
 
       if (tabClass !== null && tabClass.length > 0) {
-        $tip.removeClass(tabClass.join(''));
+        tabClass.map(function (token) {
+          return token.trim();
+        }).forEach(function (tClass) {
+          return tip.classList.remove(tClass);
+        });
       }
-    }; // static
+    } // Static
+    ;
 
-
-    Popover._jQueryInterface = function _jQueryInterface(config) {
+    Popover.jQueryInterface = function jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = Data__default['default'].getData(this, DATA_KEY);
 
         var _config = typeof config === 'object' ? config : null;
 
-        if (!data && /destroy|hide/.test(config)) {
+        if (!data && /dispose|hide/.test(config)) {
           return;
         }
 
         if (!data) {
           data = new Popover(this, _config);
-          $(this).data(DATA_KEY, data);
+          Data__default['default'].setData(this, DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -145,14 +235,9 @@ var Popover = function ($) {
     };
 
     _createClass(Popover, null, [{
-      key: "VERSION",
-      // getters
-      get: function get() {
-        return VERSION;
-      }
-    }, {
       key: "Default",
-      get: function get() {
+      get: // Getters
+      function get() {
         return Default;
       }
     }, {
@@ -183,22 +268,18 @@ var Popover = function ($) {
     }]);
 
     return Popover;
-  }(Tooltip);
+  }(Tooltip__default['default']);
   /**
    * ------------------------------------------------------------------------
    * jQuery
    * ------------------------------------------------------------------------
+   * add .Popover to jQuery only if jQuery is present
    */
 
 
-  $.fn[NAME] = Popover._jQueryInterface;
-  $.fn[NAME].Constructor = Popover;
-
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Popover._jQueryInterface;
-  };
+  defineJQueryPlugin(NAME, Popover);
 
   return Popover;
-}($);
+
+})));
 //# sourceMappingURL=popover.js.map
