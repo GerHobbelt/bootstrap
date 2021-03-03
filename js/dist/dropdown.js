@@ -6,7 +6,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): dropdown.js
+ * Bootstrap (v4.0.0-beta.3): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -17,7 +17,7 @@ var Dropdown = function ($) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'dropdown';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.dropdown';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -52,7 +52,8 @@ var Dropdown = function ($) {
     DROPRIGHT: 'dropright',
     DROPLEFT: 'dropleft',
     MENURIGHT: 'dropdown-menu-right',
-    MENULEFT: 'dropdown-menu-left'
+    MENULEFT: 'dropdown-menu-left',
+    POSITION_STATIC: 'position-static'
   };
   var Selector = {
     DATA_TOGGLE: '[data-toggle="dropdown"]',
@@ -73,11 +74,13 @@ var Dropdown = function ($) {
   };
   var Default = {
     offset: 0,
-    flip: true
+    flip: true,
+    boundary: 'scrollParent'
   };
   var DefaultType = {
     offset: '(number|string|function)',
-    flip: 'boolean'
+    flip: 'boolean',
+    boundary: '(string|element)'
     /**
      * ------------------------------------------------------------------------
      * Class Definition
@@ -144,6 +147,13 @@ var Dropdown = function ($) {
           if ($(this._menu).hasClass(ClassName.MENULEFT) || $(this._menu).hasClass(ClassName.MENURIGHT)) {
             element = parent;
           }
+        } // If boundary is not `scrollParent`, then set position to `static`
+        // to allow the menu to "escape" the scroll parent's boundaries
+        // https://github.com/twbs/bootstrap/issues/24251
+
+
+        if (this._config.boundary !== 'scrollParent') {
+          $(parent).addClass(ClassName.POSITION_STATIC);
         }
 
         this._popper = new Popper(element, this._menu, this._getPopperConfig());
@@ -259,6 +269,9 @@ var Dropdown = function ($) {
           offset: offsetConf,
           flip: {
             enabled: this._config.flip
+          },
+          preventOverflow: {
+            boundariesElement: this._config.boundary
           }
         }
       };

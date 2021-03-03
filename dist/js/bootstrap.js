@@ -1,5 +1,5 @@
 /*!
-  * Bootstrap v4.0.0-beta.2 (https://getbootstrap.com)
+  * Bootstrap v4.0.0-beta.3 (https://getbootstrap.com)
   * Copyright 2011-2017 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -54,7 +54,7 @@ function _inheritsLoose(subClass, superClass) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): util.js
+ * Bootstrap (v4.0.0-beta.3): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -66,12 +66,7 @@ var Util = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var transition = false;
-  var MAX_UID = 1000000;
-  var TransitionEndEvent = {
-    WebkitTransition: 'webkitTransitionEnd',
-    transition: 'transitionend' // shoutout AngusCroll (https://goo.gl/pxwQGp)
-
-  };
+  var MAX_UID = 1000000; // shoutout AngusCroll (https://goo.gl/pxwQGp)
 
   function toType(obj) {
     return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
@@ -96,17 +91,9 @@ var Util = function ($$$1) {
       return false;
     }
 
-    var el = document.createElement('bootstrap');
-
-    for (var name in TransitionEndEvent) {
-      if (typeof el.style[name] !== 'undefined') {
-        return {
-          end: TransitionEndEvent[name]
-        };
-      }
-    }
-
-    return false;
+    return {
+      end: 'transitionend'
+    };
   }
 
   function transitionEndEmulator(duration) {
@@ -207,7 +194,7 @@ var Util = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): alert.js
+ * Bootstrap (v4.0.0-beta.3): alert.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -219,7 +206,7 @@ var Alert = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'alert';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.alert';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -379,7 +366,7 @@ var Alert = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): button.js
+ * Bootstrap (v4.0.0-beta.3): button.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -391,7 +378,7 @@ var Button = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'button';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.button';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -542,7 +529,7 @@ var Button = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): carousel.js
+ * Bootstrap (v4.0.0-beta.3): carousel.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -554,7 +541,7 @@ var Carousel = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'carousel';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.carousel';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -1042,7 +1029,7 @@ var Carousel = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): collapse.js
+ * Bootstrap (v4.0.0-beta.3): collapse.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -1054,7 +1041,7 @@ var Collapse = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'collapse';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.collapse';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -1409,7 +1396,7 @@ var Collapse = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): dropdown.js
+ * Bootstrap (v4.0.0-beta.3): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -1421,7 +1408,7 @@ var Dropdown = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'dropdown';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.dropdown';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -1456,7 +1443,8 @@ var Dropdown = function ($$$1) {
     DROPRIGHT: 'dropright',
     DROPLEFT: 'dropleft',
     MENURIGHT: 'dropdown-menu-right',
-    MENULEFT: 'dropdown-menu-left'
+    MENULEFT: 'dropdown-menu-left',
+    POSITION_STATIC: 'position-static'
   };
   var Selector = {
     DATA_TOGGLE: '[data-toggle="dropdown"]',
@@ -1477,11 +1465,13 @@ var Dropdown = function ($$$1) {
   };
   var Default = {
     offset: 0,
-    flip: true
+    flip: true,
+    boundary: 'scrollParent'
   };
   var DefaultType = {
     offset: '(number|string|function)',
-    flip: 'boolean'
+    flip: 'boolean',
+    boundary: '(string|element)'
     /**
      * ------------------------------------------------------------------------
      * Class Definition
@@ -1548,6 +1538,13 @@ var Dropdown = function ($$$1) {
           if ($$$1(this._menu).hasClass(ClassName.MENULEFT) || $$$1(this._menu).hasClass(ClassName.MENURIGHT)) {
             element = parent;
           }
+        } // If boundary is not `scrollParent`, then set position to `static`
+        // to allow the menu to "escape" the scroll parent's boundaries
+        // https://github.com/twbs/bootstrap/issues/24251
+
+
+        if (this._config.boundary !== 'scrollParent') {
+          $$$1(parent).addClass(ClassName.POSITION_STATIC);
         }
 
         this._popper = new Popper(element, this._menu, this._getPopperConfig());
@@ -1663,6 +1660,9 @@ var Dropdown = function ($$$1) {
           offset: offsetConf,
           flip: {
             enabled: this._config.flip
+          },
+          preventOverflow: {
+            boundariesElement: this._config.boundary
           }
         }
       };
@@ -1860,7 +1860,7 @@ var Dropdown = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): modal.js
+ * Bootstrap (v4.0.0-beta.3): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -1872,7 +1872,7 @@ var Modal = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'modal';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.modal';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -2436,7 +2436,7 @@ var Modal = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): tooltip.js
+ * Bootstrap (v4.0.0-beta.3): tooltip.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -2448,7 +2448,7 @@ var Tooltip = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'tooltip';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.tooltip';
   var EVENT_KEY = "." + DATA_KEY;
   var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -2466,7 +2466,8 @@ var Tooltip = function ($$$1) {
     placement: '(string|function)',
     offset: '(number|string)',
     container: '(string|element|boolean)',
-    fallbackPlacement: '(string|array)'
+    fallbackPlacement: '(string|array)',
+    boundary: '(string|element)'
   };
   var AttachmentMap = {
     AUTO: 'auto',
@@ -2486,7 +2487,8 @@ var Tooltip = function ($$$1) {
     placement: 'top',
     offset: 0,
     container: false,
-    fallbackPlacement: 'flip'
+    fallbackPlacement: 'flip',
+    boundary: 'scrollParent'
   };
   var HoverState = {
     SHOW: 'show',
@@ -2676,6 +2678,9 @@ var Tooltip = function ($$$1) {
             },
             arrow: {
               element: Selector.ARROW
+            },
+            preventOverflow: {
+              boundariesElement: this.config.boundary
             }
           },
           onCreate: function onCreate(data) {
@@ -3096,7 +3101,7 @@ var Tooltip = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): popover.js
+ * Bootstrap (v4.0.0-beta.3): popover.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3108,7 +3113,7 @@ var Popover = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'popover';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.popover';
   var EVENT_KEY = "." + DATA_KEY;
   var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -3289,7 +3294,7 @@ var Popover = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): scrollspy.js
+ * Bootstrap (v4.0.0-beta.3): scrollspy.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3301,7 +3306,7 @@ var ScrollSpy = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'scrollspy';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.scrollspy';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -3600,7 +3605,7 @@ var ScrollSpy = function ($$$1) {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): tab.js
+ * Bootstrap (v4.0.0-beta.3): tab.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3612,7 +3617,7 @@ var Tab = function ($$$1) {
    * ------------------------------------------------------------------------
    */
   var NAME = 'tab';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0-beta.3';
   var DATA_KEY = 'bs.tab';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -3739,7 +3744,7 @@ var Tab = function ($$$1) {
       var isTransitioning = callback && Util.supportsTransitionEnd() && active && $$$1(active).hasClass(ClassName.FADE);
 
       var complete = function complete() {
-        return _this2._transitionComplete(element, active, isTransitioning, callback);
+        return _this2._transitionComplete(element, active, callback);
       };
 
       if (active && isTransitioning) {
@@ -3747,15 +3752,11 @@ var Tab = function ($$$1) {
       } else {
         complete();
       }
-
-      if (active) {
-        $$$1(active).removeClass(ClassName.SHOW);
-      }
     };
 
-    _proto._transitionComplete = function _transitionComplete(element, active, isTransitioning, callback) {
+    _proto._transitionComplete = function _transitionComplete(element, active, callback) {
       if (active) {
-        $$$1(active).removeClass(ClassName.ACTIVE);
+        $$$1(active).removeClass(ClassName.SHOW + " " + ClassName.ACTIVE);
         var dropdownChild = $$$1(active.parentNode).find(Selector.DROPDOWN_ACTIVE_CHILD)[0];
 
         if (dropdownChild) {
@@ -3773,12 +3774,8 @@ var Tab = function ($$$1) {
         element.setAttribute('aria-selected', true);
       }
 
-      if (isTransitioning) {
-        Util.reflow(element);
-        $$$1(element).addClass(ClassName.SHOW);
-      } else {
-        $$$1(element).removeClass(ClassName.FADE);
-      }
+      Util.reflow(element);
+      $$$1(element).addClass(ClassName.SHOW);
 
       if (element.parentNode && $$$1(element.parentNode).hasClass(ClassName.DROPDOWN_MENU)) {
         var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
